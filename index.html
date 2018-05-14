@@ -260,7 +260,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-15T06:13:29+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-15T06:15:19+08:00">
                 2018-05-15
               </time>
             
@@ -312,7 +312,7 @@
 <li>添加隐变量Z到这个模型.</li>
 <li>使用迭代的方法求得最优的$\Theta \lbrace \theta^{(1)},\theta^{(2)},…\theta^{(t)}\rbrace$<br>每次E-M 迭代, 执行:<br>$\Theta^{g+1} = arg \,{\underset{\theta}{max}}\,\left( \int_z \,{log(p(X,Z|\theta)p(Z|X,\Theta^{(g)})){\rm d}z}\right)$</li>
 <li>$\Theta^{(g)}$是常量,因为这是上一轮迭代的$\Theta^{(g)}, \Theta$是本次要求的变量</li>
-<li>我们必须确保E-M算法是收敛的:<br>  $log[p(X|\Theta^{(g+1)})]=L\left ( \Theta^{(g+1)}  \right ) \geq L\left( \Theta^{(g)}\right )$<br>  证明收敛性:<br>  $L(\theta|X)=In\left ( p(X|\theta) \right )$<br>  $\qquad \,=\,In\left (  \frac{p(X,Z|\theta)}{p(Z|X,\theta)}\right )$<br>  $\qquad \,=\,In\left ( \frac {  \frac{p(X,Z|\theta)}{Q(Z)}} { \frac{p(Z|X, \theta)}{Q(Z)}}\,\right)$<br>  $\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} \times {\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  $\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  $\implies E(In\left ( p(X|\theta) \right )) = E\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  左右做Q(Z)分布的期望,由于左边与Z无关,得到：<br>  $\implies In\left ( p(X|\theta) \right ) = \int_Z\, \left ( {In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right )}\right )Q(Z) + \int_Z\, \left ({\left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )} \right )\,Q(z)$<br>  $\qquad \,=\, int_Z\, In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} Q(Z)\right )$</li>
+<li>我们必须确保E-M算法是收敛的:<br>  $log[p(X|\Theta^{(g+1)})]=L\left ( \Theta^{(g+1)}  \right ) \geq L\left( \Theta^{(g)}\right )$<br>  证明收敛性:<br>  $L(\theta|X)=In\left ( p(X|\theta) \right )$<br>  $\qquad \,=\,In\left (  \frac{p(X,Z|\theta)}{p(Z|X,\theta)}\right )$<br>  $\qquad \,=\,In\left ( \frac {  \frac{p(X,Z|\theta)}{Q(Z)}} { \frac{p(Z|X, \theta)}{Q(Z)}}\,\right)$<br>  $\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} \times {\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  $\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  $\implies E(In\left ( p(X|\theta) \right )) = E\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  左右做Q(Z)分布的期望,由于左边与Z无关,得到：<br>  $\implies In\left ( p(X|\theta) \right ) = \int_Z\, \left ( {In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right )}\right )Q(Z) + \int_Z\, \left ({\left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )} \right )\,Q(z)$<br>  $\qquad \,=\, int_Z\, In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} \right ) Q(Z)$</li>
 </ul>
 
           
