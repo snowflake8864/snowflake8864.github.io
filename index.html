@@ -229,6 +229,162 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.kinghua.top/2018/05/21/notebook/machinelearning/em/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zebra">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="notebook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/21/notebook/machinelearning/em/" itemprop="url">Expectation Maximization</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-21T14:50:58+08:00">
+                2018-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在很多情况下我们只能拿到不完整的数据样本，如某些样本属性值未知(未观测)而这些未知的属性值统称为隐变量。由于EM算法在这些未观测属性的情形下仍能对模型参数进行估计，所以其应用及其广泛，比如高斯混合模型，隐马尔可夫模型的非监督学习。接下我主要推导高斯混合模型</p>
+<h2 id="、引子"><a href="#、引子" class="headerlink" title="-、引子"></a>-、引子</h2><p><img src="/img/gmm_1.jpg" alt="&quot;混合高斯数据&quot;"></p>
+<p>对于这种数据,难用是一种单一的模型产生，这就是典型的混合密度模式，比如混合高斯模型(GMM):</p>
+<p>$p(X) = \sum_{l=1}^k\alpha_lN(X|\mu_l,\Sigma_l)$</p>
+<p>$\sum_{l=1}^k\alpha_l = 1$</p>
+<ul>
+<li>这是k个高斯混合的模型，所以$\sum_{l=1}^k\alpha_l = 1$</li>
+</ul>
+<p><img src="/img/gmm_2.jpg" alt="&quot;混合高斯数据&quot;"></p>
+<h2 id="混合高斯模型"><a href="#混合高斯模型" class="headerlink" title="混合高斯模型"></a>混合高斯模型</h2><p>$Let \Theta=\lbrace\alpha_1,…\alpha_k,\mu_1,…\mu_k,\Sigma_1,…\Sigma_k\rbrace$</p>
+<p>$\Theta^{MLE} = arg \,{\underset{\Theta}{max}}\,(L(\Theta|X))$</p>
+<script type="math/tex; mode=display">\qquad \, =\, arg \,{\underset{\Theta}{max}}\left( \sum_{i=1}^n \log{ \sum_{l=1}^k N(X|\mu_l,\Sigma_l) } \right)</script><ul>
+<li>不能像单一高斯模型那样,对各参数求导，并使导数为0来取得最优解</li>
+<li>这里需要引入Expectation-Maximization 算法了</li>
+</ul>
+<h2 id="EM-算法"><a href="#EM-算法" class="headerlink" title="EM 算法"></a>EM 算法</h2><h4 id="输入：观测变量数据X-隐变量数据Z-联合分布-P-X-Z-theta-条件分布-P-Z-X-theta"><a href="#输入：观测变量数据X-隐变量数据Z-联合分布-P-X-Z-theta-条件分布-P-Z-X-theta" class="headerlink" title="输入：观测变量数据X,隐变量数据Z,联合分布$P(X,Z|\theta)$,条件分布$P(Z|X,\theta)$"></a>输入：观测变量数据X,隐变量数据Z,联合分布$P(X,Z|\theta)$,条件分布$P(Z|X,\theta)$</h4><h4 id="输出-模型参数-theta"><a href="#输出-模型参数-theta" class="headerlink" title="输出: 模型参数$\theta$"></a>输出: 模型参数$\theta$</h4><h2 id="Expectation-Maximization-推导"><a href="#Expectation-Maximization-推导" class="headerlink" title="Expectation-Maximization 推导"></a>Expectation-Maximization 推导</h2><p>$\Theta^{MLE} = arg \,{\underset{\Theta}{max}}\,(L(\Theta|X))$</p>
+<ul>
+<li>添加隐变量Z到这个模型.</li>
+<li>使用迭代的方法求得最优的$\Theta \lbrace \theta^{(1)},\theta^{(2)},…\theta^{(t)}\rbrace$<br>每次E-M 迭代, 执行:</li>
+</ul>
+<p>$\Theta^{g+1} = arg \,{\underset{\theta}{max}}\,\left( \int_z \,{log(p(X,Z|\theta)p(Z|X,\Theta^{(g)})){\rm d}z}\right)$</p>
+<ul>
+<li>$\Theta^{(g)}$是常量,因为这是上一轮迭代的$\Theta^{(g)}, \Theta$是本次要求的变量</li>
+<li>我们必须确保E-M算法是收敛的:</li>
+</ul>
+<p>$log[p(X|\Theta^{(g+1)})]=L\left ( \Theta^{(g+1)}  \right ) \geq L\left( \Theta^{(g)}\right )$</p>
+<h3 id="EM算法的收敛性"><a href="#EM算法的收敛性" class="headerlink" title="EM算法的收敛性:"></a>EM算法的收敛性:</h3><p>$L(\theta|X)=In\left ( p(X|\theta) \right )$</p>
+<p>$\qquad \,=\,In\left (  \frac{p(X,Z|\theta)}{p(Z|X,\theta)}\right )$</p>
+<p>$\qquad \,=\,In\left ( \frac {  \frac{p(X,Z|\theta)}{Q(Z)}} { \frac{p(Z|X, \theta)}{Q(Z)}}\,\right)$</p>
+<p>$\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} \times {\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$</p>
+<p>$\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$</p>
+<p>$\implies E(In\left ( p(X|\theta) \right )) = E\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$</p>
+<p>左右做Q(Z)分布的期望,由于左边与Z无关,得到：</p>
+<p>$\implies In\left ( p(X|\theta) \right ) = \int_Z\, \left ( {In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right )}\right )Q(Z) + \int_Z\, \left ({\left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )} \right )\,Q(z)$</p>
+<script type="math/tex; mode=display">\qquad \,=\, \int_Z\, In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} \right ) Q(Z) + \underbrace{KL \left ( {Q(Z)||p(Z|X,\theta)}\right )}_{\geq 0}</script><script type="math/tex; mode=display">=F(\theta, Q) + \int_Z\,In \left ( {\frac{Q(Z)}{p(Z|X,\theta)}} \right )Q(Z)</script><p>从上面推导很容易得知$L(\theta|X) = In\,{p(X|\theta)} \geq \int_Z{In \left( \frac{p(X,Z|\theta)}{Q(Z)}\right)}Q(Z)$<br>这个不等式也可以通过琴森不等式推导:</p>
+<p>$L(\theta|X) = In\,\left(p(X|\theta)\right) = In\,{\int_Z\,{p(X,Z|\theta)}}$</p>
+<p>$\qquad \,=\,In\left ({\int_Z\,{\frac{p(X,Z|\theta)}{Q(Z)} Q(Z)}}\right)$</p>
+<script type="math/tex; mode=display">\qquad \,\geq\,\underbrace{\int_Z\,In\left ({\,{\frac{p(X,Z|\theta)}{Q(Z)} Q(Z)}}\right)}_{E_{Q(Z)In[f(Z)]}}</script>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://www.kinghua.top/2018/05/20/notebook/PRML/ProbabilityDistributions/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -305,143 +461,6 @@
 <script type="math/tex; mode=display">Bern(x|\mu)=\mu^x(1-\mu)^{1-x}\qquad \qquad (2.2)</script><p>which is known as the Bernoulli distribution.It is easily verified that this distribution<br>is normalized and that it has mean and variance given by</p>
 <script type="math/tex; mode=display">{\it E}[x]\,=\,\mu\qquad \qquad(2.3)</script><script type="math/tex; mode=display">{\it var}[x]\,=\,\mu(1\,-\,\mu).\qquad \qquad(2.4)</script><p>   Now suppose we have a data set ${\cal D}\,=\,\lbrace x_1,…,x_N\rbrace$ of observed values of $x$<br>We can construct the likelihood function,which is a function of $\mu$,on the assumption<br>that the observations are drawn independently from $p(x|\mu)$,so that </p>
 <script type="math/tex; mode=display">p({\cal D}|\mu)\,=\,\prod_{n=1}^Np(x_n|\mu)\,=\,\prod_{n=1}^N\mu^{x_n}(1-\mu)^{1-x_n}</script>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.kinghua.top/2018/05/20/notebook/machinelearning/em/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zebra">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="notebook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/05/20/notebook/machinelearning/em/" itemprop="url">Expectation Maximization</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-20T15:33:04+08:00">
-                2018-05-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在很多情况下我们只能拿到不完整的数据样本，如某些样本属性值未知(未观测)而这些未知的属性值统称为隐变量。由于EM算法在这些未观测属性的情形下仍能对模型参数进行估计，所以其应用及其广泛，比如高斯混合模型，隐马尔可夫模型的非监督学习。接下我主要推导高斯混合模型</p>
-<h2 id="、引子"><a href="#、引子" class="headerlink" title="-、引子"></a>-、引子</h2><p><img src="/img/gmm_1.jpg" alt="&quot;混合高斯数据&quot;"><br>对于这种数据,难用是一种单一的模型产生，这就是典型的混合密度模式，比如混合高斯模型(GMM):<br>$p(X) = \sum<em>{l=1}^k\alpha_lN(X|\mu_l,\Sigma_l)$<br>$\sum</em>{l=1}^k\alpha_l = 1$</p>
-<ul>
-<li>这是k个高斯混合的模型，所以$\sum_{l=1}^k\alpha_l = 1$<br><img src="/img/gmm_2.jpg" alt="&quot;混合高斯数据&quot;"></li>
-</ul>
-<h2 id="混合高斯模型"><a href="#混合高斯模型" class="headerlink" title="混合高斯模型"></a>混合高斯模型</h2><p>$Let \Theta=\lbrace\alpha<em>1,…\alpha_k,\mu_1,…\mu_k,\Sigma_1,…\Sigma_k\rbrace$<br>$\Theta^{MLE} = arg \,{\underset{\Theta}{max}}\,(L(\Theta|X))$<br>$\qquad \,=\,arg \,{\underset{\Theta}{max}} \left( \sum</em>{i=1}^nlog\sum_{l=1}^kN(X|\mu_l,\Sigma_l)\right)$</p>
-<ul>
-<li>不能像单一高斯模型那样,对各参数求导，并使导数为0来取得最优解</li>
-<li>这里需要引入Expectation-Maximization 算法了</li>
-</ul>
-<h2 id="EM-算法"><a href="#EM-算法" class="headerlink" title="EM 算法"></a>EM 算法</h2><h4 id="输入：观测变量数据X-隐变量数据Z-联合分布-P-X-Z-theta-条件分布-P-Z-X-theta"><a href="#输入：观测变量数据X-隐变量数据Z-联合分布-P-X-Z-theta-条件分布-P-Z-X-theta" class="headerlink" title="输入：观测变量数据X,隐变量数据Z,联合分布$P(X,Z|\theta)$,条件分布$P(Z|X,\theta)$"></a>输入：观测变量数据X,隐变量数据Z,联合分布$P(X,Z|\theta)$,条件分布$P(Z|X,\theta)$</h4><h4 id="输出-模型参数-theta"><a href="#输出-模型参数-theta" class="headerlink" title="输出: 模型参数$\theta$"></a>输出: 模型参数$\theta$</h4><h2 id="Expectation-Maximization-推导"><a href="#Expectation-Maximization-推导" class="headerlink" title="Expectation-Maximization 推导"></a>Expectation-Maximization 推导</h2><p>$\Theta^{MLE} = arg \,{\underset{\Theta}{max}}\,(L(\Theta|X))$</p>
-<ul>
-<li>添加隐变量Z到这个模型.</li>
-<li>使用迭代的方法求得最优的$\Theta \lbrace \theta^{(1)},\theta^{(2)},…\theta^{(t)}\rbrace$<br>每次E-M 迭代, 执行:<br>$\Theta^{g+1} = arg \,{\underset{\theta}{max}}\,\left( \int_z \,{log(p(X,Z|\theta)p(Z|X,\Theta^{(g)})){\rm d}z}\right)$</li>
-<li>$\Theta^{(g)}$是常量,因为这是上一轮迭代的$\Theta^{(g)}, \Theta$是本次要求的变量</li>
-<li>我们必须确保E-M算法是收敛的:<br>  $log[p(X|\Theta^{(g+1)})]=L\left ( \Theta^{(g+1)}  \right ) \geq L\left( \Theta^{(g)}\right )$<h3 id="EM算法的收敛性"><a href="#EM算法的收敛性" class="headerlink" title="EM算法的收敛性:"></a>EM算法的收敛性:</h3>  $L(\theta|X)=In\left ( p(X|\theta) \right )$<br>  $\qquad \,=\,In\left (  \frac{p(X,Z|\theta)}{p(Z|X,\theta)}\right )$<br>  $\qquad \,=\,In\left ( \frac {  \frac{p(X,Z|\theta)}{Q(Z)}} { \frac{p(Z|X, \theta)}{Q(Z)}}\,\right)$<br>  $\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} \times {\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  $\qquad \,=\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  $\implies E(In\left ( p(X|\theta) \right )) = E\,In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right ) + \left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )$<br>  左右做Q(Z)分布的期望,由于左边与Z无关,得到：<br>  $\implies In\left ( p(X|\theta) \right ) = \int<em>Z\, \left ( {In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}}\right )}\right )Q(Z) + \int_Z\, \left ({\left ({\frac {Q(Z)}{p(Z|X,\theta)}}  \right )} \right )\,Q(z)$<br>  $\qquad \,=\, \int_Z\, In\left ( {\frac {p(X,Z|\theta)}{Q(Z)}} \right ) Q(Z) + \underbrace{KL \left ( {Q(Z)||p(Z|X,\theta)}\right )}</em>{\geq 0}$<br>  $F(\theta, Q) + \int_Z\,In \left ( {\frac{Q(Z)}{p(Z|X,\theta)}} \right )Q(Z)$</li>
-</ul>
-<p>从上面推导很容易得知$L(\theta|X) = In\,{p(X|\theta)} \geq \int<em>Z{In \left( \frac{p(X,Z|\theta)}{Q(Z)}\right)}Q(Z)$<br>这个不等式也可以通过琴森不等式推导:<br>$L(\theta|X) = In\,\left(p(X|\theta)\right) = In\,{\int_Z\,{p(X,Z|\theta)}}$<br>$\qquad \,=\,In\left ({\int_Z\,{\frac{p(X,Z|\theta)}{Q(Z)} Q(Z)}}\right)$<br>$\qquad \,\geq\,\underbrace{\int_Z\,In\left ({\,{\frac{p(X,Z|\theta)}{Q(Z)} Q(Z)}}\right)}</em>{E_{Q(Z)In[f(Z)]}}$</p>
-
           
         
       
